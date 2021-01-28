@@ -1,11 +1,11 @@
 const DynamoDbLocal = require('dynamodb-local');
 const debug = require('debug')('jest-dynamodb');
 
-module.exports = async function () {
+module.exports = async function (teardownArgs) {
   // eslint-disable-next-line no-console
   debug('Teardown DynamoDB');
 
-  if (global.__DYNAMODB__) {
+  if (global.__DYNAMODB__ && !(teardownArgs.watch || teardownArgs.watchAll)) {
     await DynamoDbLocal.stopChild(global.__DYNAMODB__);
   } else {
     const dynamoDB = global.__DYNAMODB_CLIENT__;
